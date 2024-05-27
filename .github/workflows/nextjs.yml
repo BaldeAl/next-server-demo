@@ -1,0 +1,45 @@
+name: Deploy Next.js app to Google Cloud Run
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build Docker image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      packages: write # Allow CI to write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Login to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCLOUD_AUTH }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: europe-west9-docker.pkg.dev
+          username: _json_key
+          password: ${{ secrets.GCLOUD_AUTH }}
+      - name: Compute image
+        id: compute
+        run: |
+          image="${{ vars.REGISTRY }}/${{ github.actor }}-app:latest"
+          image_lower=$(echo $image | tr '[:upper:]' '[:lower:]')
+          echo "image=$image_lower" >> "$GITHUB_OUTPUT"
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          context: nextjs
+          file: nextjs/Dockerfile
+          tags: ${{ steps.compute.outputs.image }}
+      - name: Deploy to Google Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ github.actor }}-nextjs-app
+          image: ${{ steps.compute.outputs.image }}
