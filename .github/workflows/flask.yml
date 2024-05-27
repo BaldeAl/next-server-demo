@@ -46,3 +46,4 @@ jobs:
         with:
           service: ${{ steps.actor.outputs.lower }}-${{ env.app }}
           image: ${{ steps.compute.outputs.image }}
+          ports: ${{ env.PORT }}
