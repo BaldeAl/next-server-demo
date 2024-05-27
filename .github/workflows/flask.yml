@@ -1,4 +1,4 @@
-name: Deploy Next.js app to Google Cloud Run
+name: Deploy Flask app to Google Cloud Run
 
 on:
   push:
@@ -41,5 +41,5 @@ jobs:
       - name: Deploy to Google Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: ${{ github.actor }}-flask-alseny-app
+          service: ${{ github.actor }}-flask-app
           image: ${{ steps.compute.outputs.image }}
