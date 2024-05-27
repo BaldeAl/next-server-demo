@@ -1,15 +1,15 @@
-from flask import Flask
+from flask import Flask, render_template
 import os
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return 'Bienvenue sur mon site!'
+    return render_template('index.html')
 
-@app.route('/bonjour/<nom>')
+@app.route('/mage/<nom>')
 def bonjour(nom):
-    return f'Bonjour {nom}!'
+    return f'Fait par le mage {nom}!'
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT'))
