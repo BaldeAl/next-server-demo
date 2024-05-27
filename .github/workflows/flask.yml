@@ -36,10 +36,10 @@ jobs:
         with:
           push: true
           context: flask
-          file: flask/Dockerfile
+          file: Dockerfile
           tags: ${{ steps.compute.outputs.image }}
       - name: Deploy to Google Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: ${{ github.actor }}-flask-app
+          service: ${{ github.actor }}-flask-bal-app
           image: ${{ steps.compute.outputs.image }}
