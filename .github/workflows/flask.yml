@@ -1,4 +1,4 @@
-name: Deploy Flask app to Google Cloud Run
+name: Deploy Next.js app to Google Cloud Run
 
 on:
   push:
@@ -36,10 +36,10 @@ jobs:
         with:
           push: true
           context: flask
-          file: Dockerfile
+          file: flask/Dockerfile
           tags: ${{ steps.compute.outputs.image }}
       - name: Deploy to Google Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: ${{ github.actor }}-flask-bal-app
+          service: ${{ github.actor }}-flask-balde-app
           image: ${{ steps.compute.outputs.image }}
