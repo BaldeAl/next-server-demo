@@ -27,10 +27,7 @@ jobs:
           password: ${{ secrets.GCLOUD_AUTH }}
       - name: Compute image
         id: compute
-        run: |
-          image="${{ vars.REGISTRY }}/${{ github.actor }}-app:latest"
-          image_lower=$(echo $image | tr '[:upper:]' '[:lower:]')
-          echo "image=$image_lower" >> "$GITHUB_OUTPUT"
+        run: echo "image=${{ vars.REGISTRY }}/${{ steps.actor.outputs.lower }}-${{ env.app }}:latest" >> "$GITHUB_OUTPUT"
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
